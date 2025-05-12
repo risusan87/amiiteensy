@@ -1,0 +1,5 @@
+build
+
+# external bins
+teensy_loader_cli
+gcc-arm-none-eabi-10.3-2021.10
