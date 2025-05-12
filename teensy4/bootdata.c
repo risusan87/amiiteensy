@@ -2,21 +2,22 @@
 
 #include <stdint.h>
 
-extern void init(void);
+extern void ResetHandler(void);
 extern unsigned long _flashimagelen;
 extern uint32_t _flashorigin;
 extern uint32_t _sp_top;
 
 
 __attribute__((used, section(".vector_table")))
-const uint32_t vector_table[2] = 
+const uint32_t VectorTable[2] = 
 {
     (uint32_t) &_sp_top,	// stack pointer
-    (uint32_t) init			// program entry
+    (uint32_t) ResetHandler		// program entry
 }; 
 
 __attribute__ ((section(".bootdata"), used))
-const uint32_t BootData[3] = {
+const uint32_t BootData[3] = 
+{
 	(uint32_t) &_flashorigin,
 	(uint32_t) &_flashimagelen,
 	0
@@ -27,22 +28,27 @@ const uint32_t BootData[3] = {
 *	https://www.pjrc.com/teensy/IMXRT1060RM_rev3_annotations.pdf#page=256
 **/
 __attribute__ ((section(".ivt"), used))
-const uint32_t ImageVectorTable[8] = {
+const uint32_t ImageVectorTable[8] = 
+{
 	0x402000D1,		// header
-	(uint32_t)vector_table,// program entry - Apparently this must point to the vector table
+	(uint32_t)VectorTable,// program entry - Apparently this must point to the vector table
 	0,			// reserved
-	0,			// dcd
+	0,			// dcd (not supported in teensy4)
 	(uint32_t)BootData,	// abs address of boot data
 	(uint32_t)ImageVectorTable, // self
-	0,		// command sequence file
+	0,		// command sequence file (ignored for now)
 	0			// reserved
 };
 
 /**
 * MCU_Flashloader_Reference_Manual.pdf, 8.2.1, Table 8-2, page 72-75
+*
+* Particularly i.MX RT 1062 is serial NOR flash via FlexSPI:
+* https://www.pjrc.com/teensy/IMXRT1060RM_rev3_annotations.pdf#page=222
 **/
 __attribute__ ((section(".flashconfig"), used))
-uint32_t FlexSPI_NOR_Config[128] = {
+uint32_t FlexSPI_NOR_Config[128] = 
+{
 	// Refered from core/teensy4
 	0x42464346,		// Tag	Ascii: FCFB			0x00
 	0x56010000,		// Version
