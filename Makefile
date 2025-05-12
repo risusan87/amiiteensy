@@ -5,7 +5,7 @@ LD = arm-none-eabi-ld
 OBJCOPY = arm-none-eabi-objcopy
 OBJDUMP = arm-none-eabi-objdump
 SIZE = arm-none-eabi-size
-LOADER = ./teensy_loader_cli
+LOADER = teensy_loader_cli
 
 OUTFILE = firmware
 
