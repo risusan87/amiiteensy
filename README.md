@@ -3,7 +3,7 @@ Teensy 4.0 project which uses RFID-RC522 for Amiibo I/O purposes.</br>
 Code written in bare-metal C.
 
 ## Compiling
-Install GNU toolchain. IMXRT1060 family chip requires arm-none-eabi-gcc for compile.</br>
+Install GNU toolchain. i.MX RT family chip requires arm-none-eabi-gcc for compile.</br>
 https://developer.arm.com/downloads/-/gnu-rm
 
 Install teensy_loader_cli. Repository is available at:</br>
