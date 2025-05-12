@@ -10,16 +10,17 @@ ENTRY(ImageVectorTable)
 
 SECTIONS
 {
-  	.text.nor_config : {
+  	.text.boot : {
 		KEEP(*(.flashconfig))
-		. = ALIGN(4);
-	} > FLASH
-
-	.text.boot : {
+		FILL(0xFF)
 		. = ORIGIN(FLASH) + 0x1000;
 		KEEP(*(.ivt))
-		KEEP(*(.bootdata))
+		. = ALIGN(16);
+	} > FLASH
+
+	.text.startup : {
 		KEEP(*(.vector_table))
+		KEEP(*(.bootdata))
 		. = ALIGN(4);
 	} > FLASH
 
@@ -28,8 +29,43 @@ SECTIONS
 		. = ALIGN(4);
 	} > FLASH
 
+	.text.main : {
+		*(.text*)
+		. = ALIGN(4);
+	} > ITCM AT > FLASH
+
+	.stack (NOLOAD) : {
+		. = ORIGIN(DTCM);
+		*(.stack*)
+		. = ORIGIN(DTCM) + 0x2000;
+	} > DTCM
+
+	.data : {
+		*(.data*)
+		. = . + 0x2000;
+	} > DTCM AT > FLASH
+
+	.bss : {
+		*(.bss*)
+		. = . + 0x2000;
+	} > DTCM
+
+
+	_sp_top = ORIGIN(DTCM) + 0x2000;
+
+	_sitcm = LOADADDR(.text.main);
+	_eitcm = _sitcm + SIZEOF(.text.main);
+	_itcm_start = ADDR(.text.main);
+	_itcm_end   = _itcm_start + SIZEOF(.text.main);
+
+	_sdata = LOADADDR(.data);
+	_edata = _sdata + SIZEOF(.data);
+	_dtcm_data_start = ADDR(.data);
+	_dtcm_data_end = _dtcm_data_start + SIZEOF(.data);
+
+	_sbss = ADDR(.bss);
+	_ebss = _sbss + SIZEOF(.bss);
 
 	_flashorigin = ORIGIN(FLASH);
-  	_sp_top = ORIGIN(RAM) + LENGTH(RAM);
-	_flashimagelen = SIZEOF(.text.nor_config);
+	_flashimagelen = SIZEOF(.text.boot) + SIZEOF(.text.startup) + SIZEOF(.text.code) + SIZEOF(.text.main);
 }
