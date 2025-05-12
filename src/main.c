@@ -15,6 +15,7 @@
 
 #define DELAY_LENGTH 10000000
 
+// Freq = 600MHz
 void delay(int duration) {
     volatile unsigned int i = 0;
     while(i < duration) {
@@ -32,15 +33,12 @@ int main()
 
     for(;;) {
 
-        // Set PIN 13 HIGH
+        // HIGH
         GPIO7_DR_SET = (1 << 3);
-
-        // Poor man's delay
         delay(DELAY_LENGTH);
 
-        // Set PIN 13 LOW
+        // LOW
         GPIO7_DR_CLEAR = (1 << 3);
         delay(DELAY_LENGTH);
-
     }
 }
