@@ -1,4 +1,5 @@
 build
+.venv
 
 # external bins
 teensy_loader_cli
