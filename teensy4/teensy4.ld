@@ -18,6 +18,7 @@ SECTIONS
 		. = ALIGN(16);
 	} > FLASH
 
+
 	.text.startup : {
 		KEEP(*(.vector_table))
 		KEEP(*(.bootdata))
@@ -29,34 +30,36 @@ SECTIONS
 		. = ALIGN(4);
 	} > FLASH
 
-	.text.main : {
-		*(.text*)
+	.text.isr : {
+		KEEP(*(.isr))
 		. = ALIGN(4);
 	} > ITCM AT > FLASH
 
-	.stack (NOLOAD) : {
-		. = ORIGIN(DTCM);
+	.text.main : {
+		*(.text*)
+		. = ALIGN(4);
+	} > FLASH
+
+	_sp_top = ORIGIN(DTCM) + 0x4000;
+	.stack : {
 		*(.stack*)
-		. = ORIGIN(DTCM) + 0x2000;
+		. = ORIGIN(DTCM) + 0x4000;
 	} > DTCM
 
 	.data : {
 		*(.data*)
-		. = . + 0x2000;
+		. = . + 0x4000;
 	} > DTCM AT > FLASH
 
 	.bss : {
 		*(.bss*)
-		. = . + 0x2000;
+		. = . + 0x4000;
 	} > DTCM
 
-
-	_sp_top = ORIGIN(DTCM) + 0x2000;
-
-	_sitcm = LOADADDR(.text.main);
-	_eitcm = _sitcm + SIZEOF(.text.main);
-	_itcm_start = ADDR(.text.main);
-	_itcm_end   = _itcm_start + SIZEOF(.text.main);
+	_sitcm = LOADADDR(.text.isr);
+	_eitcm = _sitcm + SIZEOF(.text.isr);
+	_itcm_start = ADDR(.text.isr);
+	_itcm_end   = _itcm_start + SIZEOF(.text.isr);
 
 	_sdata = LOADADDR(.data);
 	_edata = _sdata + SIZEOF(.data);
