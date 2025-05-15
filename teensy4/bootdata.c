@@ -1,18 +1,23 @@
-//#include "imxrt.h"
+#include "imxrt.h"
 
 #include <stdint.h>
 
+__attribute__((weak)) void Default_Handler(void) { while (1); }
 extern void ResetHandler(void);
 extern unsigned long _flashimagelen;
 extern uint32_t _flashorigin;
 extern uint32_t _sp_top;
 
+// ISR
+extern void usb1_isr(void);
 
-__attribute__((used, section(".vector_table")))
-const uint32_t VectorTable[2] = 
+__attribute__((used, aligned(128), section(".vector_table")))
+void (* const VectorTable[])(void) = 
 {
-    (uint32_t) &_sp_top,	// stack pointer
-    (uint32_t) ResetHandler		// program entry
+    (void*)&_sp_top,	// stack pointer
+    ResetHandler,		// program entry
+
+	[IRQ_USB1 + 16] = usb1_isr	// USB1
 }; 
 
 __attribute__ ((section(".bootdata"), used))
