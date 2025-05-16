@@ -48,7 +48,7 @@ const uint32_t ImageVectorTable[8] =
 /**
 * MCU_Flashloader_Reference_Manual.pdf, 8.2.1, Table 8-2, page 72-75
 *
-* Particularly i.MX RT 1062 is serial NOR flash via FlexSPI:
+* Particularly Teensy 4.0 is serial NOR flash via FlexSPI:
 * https://www.pjrc.com/teensy/IMXRT1060RM_rev3_annotations.pdf#page=222
 **/
 __attribute__ ((section(".flashconfig"), used))
