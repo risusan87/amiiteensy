@@ -19,6 +19,7 @@ void ResetHandler(void)
     // 0b00 = not used, 0b01 = OCRAM, 0b10 = DTCM, 0b11 = ITCM
     // 0b11111111111111111010101001010101
     // 0x   F   F   F   F   A   A   5   5 
+    // 256KB ITCM, 128KB DTCM, 128KB OCRAM
     // TODO: Dynamic configiration within linker script
     IOMUXC_GPR_GPR16 |= (1 << 2);
     IOMUXC_GPR_GPR17 = 0xFFFFAA55;
