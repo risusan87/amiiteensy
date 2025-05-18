@@ -26,7 +26,8 @@ void ResetHandler(void)
     // Unknown purpose but this will write into reserved bits
     // IOMUXC_GPR_GPR14 = 0x00AA0000;
 
-    // Vector table pointer set
+    // Vector table pointer set 
+    // default somehow points to 0xE000ED08, which is a problem with ISRs
     SCB_VTOR = (uint32_t) &VectorTable;
 
     // move executable code to ITCM

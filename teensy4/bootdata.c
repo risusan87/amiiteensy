@@ -30,7 +30,8 @@ const uint32_t BootData[3] =
 
 /**
 *	Image vector table must be placed at location 0x60001000 as referred to image vector table offset.
-*	https://www.pjrc.com/teensy/IMXRT1060RM_rev3_annotations.pdf#page=256
+*	page 256
+*	pointer to this table must also be shared with SCB_VTOR
 **/
 __attribute__ ((section(".ivt"), used))
 const uint32_t ImageVectorTable[8] = 
